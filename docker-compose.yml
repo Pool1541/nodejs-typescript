@@ -1,0 +1,19 @@
+version: '3.1' #Versión de la sintaxis que vamos a utilizar para que docker compose pueda interpretar correctamente el archivo.
+
+services:
+  # Nombre del servicio de la base de datos (se lo asignamos nosotros)
+  typescript_nodejs_db:
+    image: mysql:5.7 # Seleccionamos la imagen que vamos a usar y su versión, en este caso será una DB mySql v5.7
+    volumes:
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql # Indicamos que lea y copie el archivo init.sql que se encuenta en nuestra carpeta mysql en la carpeta docker-entrypoint-initdb.d/init.sql que se encuentra en el volumen del contenedor docker.
+    command: --init-file /docker-entrypoint-initdb.d/init.sql # Comando para que se ejecute el archivo init.sql de la carpeta especificada en el volumen del contenedor de docker.
+    ports:
+      - '3312:3306' # Seleccionamos el puerto que usará la imagen.
+    environment:
+      MYSQL_DATABASE: typescript_nodejs_db
+      MYSQL_ROOT_USER: upool # Creamos un nombre de usuario para el usuario root
+      MYSQL_USER: upool # Creamos un nombre de usuario común
+      MYSQL_ROOT_PASSWORD: secret # Creamos la contraseña para el usuario root
+      MYSQL_PASSWORD: secret # Creamos la contraseña para el usuario común
+
+## Luego ejecutamos el comando "docker-compose up" en la terminal para inicializar y levantar la base de datos.

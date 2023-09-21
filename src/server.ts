@@ -1,7 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-import { UserRouter } from './routes/user.router';
+import { UserRouter } from './user/user.router';
 import { ConfigServer } from './config/config';
 
 class ServerBoostrap extends ConfigServer {
@@ -12,6 +12,9 @@ class ServerBoostrap extends ConfigServer {
     super();
     this.middlewares();
     this.listen();
+    this.dbConnect()
+      .then(() => console.log('DB connected'))
+      .catch((err) => console.log(err));
   }
 
   routers(): Array<express.Router> {

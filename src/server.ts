@@ -6,6 +6,9 @@ import { ConfigServer } from './config/config';
 import { ProductRouter } from './product/Product.router';
 import { CategoryRouter } from './category/Category.router';
 import { CustomerRouter } from './customer/customer.router';
+import { PurchaseRouter } from './purchase/purchase.router';
+import { PurchaseProductRouter } from './purchase/purchase-product.router';
+import { DataSource } from 'typeorm';
 
 class ServerBoostrap extends ConfigServer {
   public app: express.Application = express();
@@ -13,11 +16,9 @@ class ServerBoostrap extends ConfigServer {
 
   constructor() {
     super();
+    this.dbConnect();
     this.middlewares();
     this.listen();
-    this.dbConnect()
-      .then(() => console.log('DB connected'))
-      .catch((err) => console.log(err));
   }
 
   routers(): Array<express.Router> {
@@ -26,6 +27,8 @@ class ServerBoostrap extends ConfigServer {
       new ProductRouter().router,
       new CategoryRouter().router,
       new CustomerRouter().router,
+      new PurchaseRouter().router,
+      new PurchaseProductRouter().router,
     ];
   }
 
@@ -35,6 +38,12 @@ class ServerBoostrap extends ConfigServer {
     this.app.use(cors());
     this.app.use(morgan('dev'));
     this.app.use('/api', this.routers());
+  }
+
+  async dbConnect(): Promise<DataSource | void> {
+    return this.initConnect
+      .then(() => console.log('Connected to database'))
+      .catch((err) => console.error(err));
   }
 
   public listen() {

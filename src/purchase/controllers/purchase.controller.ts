@@ -1,15 +1,15 @@
 import { Request, Response } from 'express';
-import { UserService } from '../services/user.service';
-import { HttpResponse } from '../../shared/response/http.response';
 import { DeleteResult, UpdateResult } from 'typeorm';
+import { PurchaseService } from '../services/purchase.service';
+import { HttpResponse } from '../../shared/response/http.response';
 
-export class UserController {
+export class PurchaseController {
   constructor(
-    private readonly userService: UserService = new UserService(),
+    private readonly userService: PurchaseService = new PurchaseService(),
     private readonly httpResponse: HttpResponse = new HttpResponse()
   ) {}
 
-  async getUser(req: Request, res: Response) {
+  async getPurchases(req: Request, res: Response) {
     try {
       const data = await this.userService.findAll();
       if (data.length === 0) {
@@ -19,11 +19,11 @@ export class UserController {
       return this.httpResponse.Ok(res, data);
     } catch (error) {
       console.error(error);
-      return this.httpResponse.Error(res, error);
+      return this.httpResponse.Ok(res, error);
     }
   }
 
-  async getUserById(req: Request, res: Response) {
+  async getPurchaseById(req: Request, res: Response) {
     try {
       const { id } = req.params;
       const data = await this.userService.findById(id);
@@ -35,22 +35,22 @@ export class UserController {
       return this.httpResponse.Ok(res, data);
     } catch (error) {
       console.error(error);
-      return this.httpResponse.Error(res, error);
+      return this.httpResponse.Ok(res, error);
     }
   }
 
-  async createUser(req: Request, res: Response) {
+  async createPurchase(req: Request, res: Response) {
     try {
       const { body } = req;
       const data = await this.userService.create(body);
       return this.httpResponse.Ok(res, data);
     } catch (error) {
       console.error(error);
-      return this.httpResponse.Error(res, error);
+      return this.httpResponse.Ok(res, error);
     }
   }
 
-  async updateUser(req: Request, res: Response) {
+  async updatePurchase(req: Request, res: Response) {
     try {
       const { id } = req.params;
       const { body } = req;
@@ -61,11 +61,11 @@ export class UserController {
       return this.httpResponse.Ok(res, data);
     } catch (error) {
       console.error(error);
-      return this.httpResponse.Error(res, error);
+      return this.httpResponse.Ok(res, error);
     }
   }
 
-  async deleteUser(req: Request, res: Response) {
+  async deletePurchase(req: Request, res: Response) {
     try {
       const { id } = req.params;
       const data: DeleteResult = await this.userService.delete(id);
@@ -75,7 +75,7 @@ export class UserController {
       return this.httpResponse.Ok(res, data);
     } catch (error) {
       console.error(error);
-      return this.httpResponse.Error(res, error);
+      return this.httpResponse.Ok(res, error);
     }
   }
 }

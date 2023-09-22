@@ -1,15 +1,15 @@
 import { Request, Response } from 'express';
-import { UserService } from '../services/user.service';
-import { HttpResponse } from '../../shared/response/http.response';
 import { DeleteResult, UpdateResult } from 'typeorm';
+import { HttpResponse } from '../../shared/response/http.response';
+import { PurchaseProductService } from '../services/purchase-product.service';
 
-export class UserController {
+export class PurchaseProductController {
   constructor(
-    private readonly userService: UserService = new UserService(),
+    private readonly userService: PurchaseProductService = new PurchaseProductService(),
     private readonly httpResponse: HttpResponse = new HttpResponse()
   ) {}
 
-  async getUser(req: Request, res: Response) {
+  async getPurchaseProducts(req: Request, res: Response) {
     try {
       const data = await this.userService.findAll();
       if (data.length === 0) {
@@ -23,7 +23,7 @@ export class UserController {
     }
   }
 
-  async getUserById(req: Request, res: Response) {
+  async getPurchaseProductById(req: Request, res: Response) {
     try {
       const { id } = req.params;
       const data = await this.userService.findById(id);
@@ -39,7 +39,7 @@ export class UserController {
     }
   }
 
-  async createUser(req: Request, res: Response) {
+  async createPurchaseProduct(req: Request, res: Response) {
     try {
       const { body } = req;
       const data = await this.userService.create(body);
@@ -50,7 +50,7 @@ export class UserController {
     }
   }
 
-  async updateUser(req: Request, res: Response) {
+  async updatePurchaseProduct(req: Request, res: Response) {
     try {
       const { id } = req.params;
       const { body } = req;
@@ -65,7 +65,7 @@ export class UserController {
     }
   }
 
-  async deleteUser(req: Request, res: Response) {
+  async deletePurchaseProduct(req: Request, res: Response) {
     try {
       const { id } = req.params;
       const data: DeleteResult = await this.userService.delete(id);

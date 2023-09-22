@@ -1,10 +1,10 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../config/base.entity';
 import { CustomerEntity } from '../../customer/entities/customer.entity';
-import { PurchaseProductEntity } from './purchases-products.entity';
+import { PurchaseProductEntity } from './purchase-product.entity';
 
-type StatusType = 'purchased' | 'loading' | 'rejected';
-type PaymentMethodType = 'cash' | 'credit' | 'debit';
+export type StatusType = 'purchased' | 'loading' | 'rejected';
+export type PaymentMethodType = 'cash' | 'credit' | 'debit';
 
 @Entity({ name: 'purchase' })
 export class PurchaseEntity extends BaseEntity {

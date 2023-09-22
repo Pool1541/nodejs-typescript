@@ -5,6 +5,7 @@ import { UserRouter } from './user/user.router';
 import { ConfigServer } from './config/config';
 import { ProductRouter } from './product/Product.router';
 import { CategoryRouter } from './category/Category.router';
+import { CustomerRouter } from './customer/customer.router';
 
 class ServerBoostrap extends ConfigServer {
   public app: express.Application = express();
@@ -20,7 +21,12 @@ class ServerBoostrap extends ConfigServer {
   }
 
   routers(): Array<express.Router> {
-    return [new UserRouter().router, new ProductRouter().router, new CategoryRouter().router];
+    return [
+      new UserRouter().router,
+      new ProductRouter().router,
+      new CategoryRouter().router,
+      new CustomerRouter().router,
+    ];
   }
 
   public middlewares() {

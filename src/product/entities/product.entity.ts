@@ -12,7 +12,7 @@ export class ProductEntity extends BaseEntity {
   description!: string;
 
   @Column()
-  price!: Number;
+  price!: number;
 
   //Relación muchos a uno con la entidad Category
   @ManyToOne(() => CategoryEntity, (category) => category.products)

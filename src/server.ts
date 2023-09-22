@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import { UserRouter } from './user/user.router';
 import { ConfigServer } from './config/config';
+import { ProductRouter } from './product/Product.router';
 
 class ServerBoostrap extends ConfigServer {
   public app: express.Application = express();
@@ -18,7 +19,7 @@ class ServerBoostrap extends ConfigServer {
   }
 
   routers(): Array<express.Router> {
-    return [new UserRouter().router];
+    return [new UserRouter().router, new ProductRouter().router];
   }
 
   public middlewares() {

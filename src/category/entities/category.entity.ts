@@ -4,7 +4,7 @@ import { ProductEntity } from '../../product/entities/product.entity';
 
 @Entity({ name: 'category' })
 export class CategoryEntity extends BaseEntity {
-  @Column()
+  @Column({ unique: true })
   categoryName!: string;
 
   // Relación uno a muchos con la entidad Product

@@ -1,15 +1,24 @@
 import { Request, Response } from 'express';
 import { CustomerService } from '../services/customer.service';
+import { HttpResponse } from '../../shared/response/http.response';
 
 export class CustomerController {
-  constructor(private readonly customerService: CustomerService = new CustomerService()) {}
+  constructor(
+    private readonly customerService: CustomerService = new CustomerService(),
+    private readonly httpResponse: HttpResponse = new HttpResponse()
+  ) {}
 
   async getCustomers(req: Request, res: Response) {
     try {
       const data = await this.customerService.findAll();
-      res.status(200).json(data);
+      if (data.length === 0) {
+        return this.httpResponse.NotFound(res, 'No se encontraron resultados');
+      }
+
+      this.httpResponse.Ok(res, data);
     } catch (error) {
       console.error(error);
+      return this.httpResponse.Ok(res, error);
     }
   }
 
@@ -17,9 +26,14 @@ export class CustomerController {
     try {
       const { id } = req.params;
       const data = await this.customerService.findById(id);
-      res.status(200).json(data);
+      if (!data) {
+        return this.httpResponse.NotFound(res, 'No se encontraron resultados');
+      }
+
+      return this.httpResponse.Ok(res, data);
     } catch (error) {
       console.error(error);
+      return this.httpResponse.Ok(res, error);
     }
   }
 
@@ -27,9 +41,10 @@ export class CustomerController {
     try {
       const { body } = req;
       const data = await this.customerService.create(body);
-      res.status(200).json(data);
+      return this.httpResponse.Ok(res, data);
     } catch (error) {
       console.error(error);
+      return this.httpResponse.Ok(res, error);
     }
   }
 
@@ -38,9 +53,12 @@ export class CustomerController {
       const { body } = req;
       const { id } = req.params;
       const data = await this.customerService.update(id, body);
-      res.status(200).json(data);
+      if (!data.affected) return this.httpResponse.NotFound(res, 'Error al actualizar');
+
+      return this.httpResponse.Ok(res, data);
     } catch (error) {
       console.error(error);
+      return this.httpResponse.Ok(res, error);
     }
   }
 
@@ -48,9 +66,12 @@ export class CustomerController {
     try {
       const { id } = req.params;
       const data = await this.customerService.delete(id);
-      res.status(200).json(data);
+      if (!data.affected) return this.httpResponse.NotFound(res, 'Error al eliminar');
+
+      return this.httpResponse.Ok(res, data);
     } catch (error) {
       console.error(error);
+      return this.httpResponse.Ok(res, error);
     }
   }
 }

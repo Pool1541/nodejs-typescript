@@ -1,4 +1,3 @@
-import { Exclude } from 'class-transformer';
 import { BaseEntity } from '../../config/base.entity';
 import { CustomerEntity } from '../../customer/entities/customer.entity';
 import { Column, Entity, OneToOne } from 'typeorm';
@@ -18,8 +17,7 @@ export class UserEntity extends BaseEntity {
   @Column()
   email!: string;
 
-  @Exclude()
-  @Column()
+  @Column({ select: false })
   password!: string;
 
   @Column()

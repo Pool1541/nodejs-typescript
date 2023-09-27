@@ -13,7 +13,12 @@ export class PurchaseService extends BaseService<PurchaseEntity> {
   }
 
   async findById(id: string): Promise<PurchaseEntity | null> {
-    return (await this.execRepository).findOneBy({ id });
+    return (await this.execRepository)
+      .createQueryBuilder('purchase')
+      .leftJoinAndSelect('purchase.customer', 'customer')
+      .leftJoinAndSelect('purchase.purchaseProduct', 'purchaseProduct')
+      .where({ id })
+      .getOne();
   }
 
   async create(body: PurchaseDTO): Promise<PurchaseEntity> {

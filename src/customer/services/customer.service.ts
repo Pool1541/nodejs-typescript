@@ -8,11 +8,18 @@ export class CustomerService extends BaseService<CustomerEntity> {
   }
 
   async findAll(): Promise<Array<CustomerEntity>> {
-    return (await this.execRepository).find();
+    return (await this.execRepository)
+      .createQueryBuilder('customer')
+      .leftJoinAndSelect('customer.user', 'user')
+      .getMany();
   }
 
   async findById(id: string): Promise<CustomerEntity | null> {
-    return (await this.execRepository).findOneBy({ id });
+    return (await this.execRepository)
+      .createQueryBuilder('customer')
+      .leftJoinAndSelect('customer.user', 'user')
+      .where({ id })
+      .getOne();
   }
 
   async create(body: CustomerEntity): Promise<CustomerEntity> {

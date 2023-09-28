@@ -3,15 +3,24 @@ import { BaseEntity } from '../../config/base.entity';
 import { CustomerEntity } from '../../customer/entities/customer.entity';
 import { PurchaseProductEntity } from './purchase-product.entity';
 
-export type StatusType = 'purchased' | 'loading' | 'rejected';
-export type PaymentMethodType = 'cash' | 'credit' | 'debit';
+export enum StatusType {
+  PURCHASED = 'PURCHASED',
+  PENDING = 'PENDING',
+  REJECTED = 'REJECTED',
+}
+
+export enum PaymentMethodType {
+  CASH = 'CASH',
+  CREDIT = 'CREDIT',
+  DEBIT = 'DEBIT',
+}
 
 @Entity({ name: 'purchase' })
 export class PurchaseEntity extends BaseEntity {
-  @Column()
+  @Column({ type: 'enum', enum: StatusType, nullable: false })
   status!: StatusType;
 
-  @Column()
+  @Column({ type: 'enum', enum: PaymentMethodType, nullable: false })
   paymentMethod!: PaymentMethodType;
 
   //Relación muchos a uno con la entidad Customer

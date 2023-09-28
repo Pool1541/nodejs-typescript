@@ -19,7 +19,8 @@ export class PurchaseProductService extends BaseService<PurchaseProductEntity> {
 
   async create(body: PurchaseProductDTO): Promise<PurchaseProductEntity> {
     const newPurchaseProduct = (await this.execRepository).create(body);
-    const product = await this.productService.findById(newPurchaseProduct.product.id);
+    const productId = newPurchaseProduct.product as unknown as string;
+    const product = await this.productService.findById(productId);
     newPurchaseProduct.totalPrice = product!.price * newPurchaseProduct.quantityProduct;
     return (await this.execRepository).save(newPurchaseProduct);
   }

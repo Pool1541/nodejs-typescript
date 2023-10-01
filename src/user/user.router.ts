@@ -19,6 +19,11 @@ export class UserRouter extends BaseRouter<UserController, UserMiddleware> {
       (req, res) => this.controller.createUser(req, res)
     );
     this.router.put('/user/:id', (req, res) => this.controller.updateUser(req, res));
-    this.router.delete('/user/:id', (req, res) => this.controller.deleteUser(req, res));
+    this.router.delete(
+      '/user/:id',
+      this.middleware?.passAuth('jwt'),
+      (req, res, next) => [this.middleware?.checkAdminRole(req, res, next)],
+      (req, res) => this.controller.deleteUser(req, res)
+    );
   }
 }

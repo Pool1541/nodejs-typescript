@@ -9,6 +9,9 @@ import { CustomerRouter } from './customer/customer.router';
 import { PurchaseRouter } from './purchase/purchase.router';
 import { PurchaseProductRouter } from './purchase/purchase-product.router';
 import { DataSource } from 'typeorm';
+import { LoginStrategy } from './auth/strategies/login.strategy';
+import { JwtStrategy } from './auth/strategies/jwt.strategy';
+import { AuthRouter } from './auth/auth.router';
 
 class ServerBoostrap extends ConfigServer {
   public app: express.Application = express();
@@ -19,6 +22,7 @@ class ServerBoostrap extends ConfigServer {
     this.dbConnect();
     this.middlewares();
     this.listen();
+    this.passportUse();
   }
 
   routers(): Array<express.Router> {
@@ -29,6 +33,7 @@ class ServerBoostrap extends ConfigServer {
       new CustomerRouter().router,
       new PurchaseRouter().router,
       new PurchaseProductRouter().router,
+      new AuthRouter().router,
     ];
   }
 
@@ -38,6 +43,10 @@ class ServerBoostrap extends ConfigServer {
     this.app.use(cors());
     this.app.use(morgan('dev'));
     this.app.use('/api', this.routers());
+  }
+
+  passportUse() {
+    return [new LoginStrategy().use, new JwtStrategy().use];
   }
 
   async dbConnect(): Promise<DataSource | void> {
